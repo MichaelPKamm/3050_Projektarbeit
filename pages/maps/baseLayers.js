@@ -1,5 +1,6 @@
 import React from "react";
 
+// Define your base layers array
 const BaseLayers = () => {
   const layers = [
     {
@@ -16,6 +17,10 @@ const BaseLayers = () => {
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}",
     },
   ];
+
+  if (!layers || layers.length === 0) {
+    return <div>No base layers available.</div>;
+  }
 
   return (
     <div>
