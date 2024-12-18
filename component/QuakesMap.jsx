@@ -7,8 +7,8 @@ import Header from "./Header";
 import { BASE_LAYERS } from "./baseLayers";
 
 const OUTER_BOUNDS = [
-  [-80, -180],
-  [80, 180],
+  [45.398181, 5.140242],
+  [48.230651, 11.47757],
 ];
 
 const BASE_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/";
@@ -103,8 +103,8 @@ function Map() {
       <MapContainer
         style={{ height: "100vh" }}
         center={[0, 0]}
-        zoom={2}
-        minZoom={2}
+        zoom={8}
+        minZoom={8}
         maxBounds={OUTER_BOUNDS}
         maxBoundsViscosity={1}
       >
