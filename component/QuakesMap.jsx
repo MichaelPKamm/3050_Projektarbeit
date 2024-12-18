@@ -3,8 +3,8 @@ import { CssBaseline, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import L from "leaflet";
 import { MapContainer, TileLayer, GeoJSON, LayersControl } from "react-leaflet";
-import Header from "../pages/maps/Header";
-import { BASE_LAYERS } from "../pages/maps/baseLayers";
+import Header from "./Header";
+import { BASE_LAYERS } from "./baseLayers";
 
 const OUTER_BOUNDS = [
   [-80, -180],
