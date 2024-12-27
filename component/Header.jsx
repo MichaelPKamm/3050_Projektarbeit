@@ -7,10 +7,19 @@ import {
   IconButton,
   ToggleButton,
   ToggleButtonGroup,
+  TextField,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
-export default function Header({ minMag, setMinMag, timespan, setTimespan }) {
+//
+//Header Funktion mit Menuebar und Aswahl Datum
+//
+
+export default function Header({ selectedDate, setSelectedDate }) {
   const [showButtons, setShowButtons] = useState(false);
 
   const toggleButtons = () => setShowButtons(!showButtons);
@@ -23,7 +32,7 @@ export default function Header({ minMag, setMinMag, timespan, setTimespan }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            USGS Earthquakes
+            Meteodaten Zürich
           </Typography>
         </Toolbar>
         {/* Rendert die buttons unter dem Titel */}
@@ -39,37 +48,16 @@ export default function Header({ minMag, setMinMag, timespan, setTimespan }) {
           >
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
               <Typography color="black" fontWeight={"bold"}>
-                Select Magnitude
+                Select Date
               </Typography>
-              <ToggleButtonGroup
-                value={minMag}
-                exclusive
-                onChange={(e, Mag) => setMinMag(Mag)}
-                color="primary"
-              >
-                <ToggleButton value={"all"}>ALL</ToggleButton>
-                <ToggleButton value={"1.0"}>M1.0+</ToggleButton>
-                <ToggleButton value={"2.5"}>M2.5+</ToggleButton>
-                <ToggleButton value={"4.5"}>M4.5+</ToggleButton>
-                <ToggleButton value={"significant"}>SIGNIFICANT</ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-            {/* Zweite selektion für Zeit */}
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-              <Typography color="black" fontWeight={"bold"}>
-                Select Time Period
-              </Typography>
-              <ToggleButtonGroup
-                value={timespan}
-                exclusive
-                onChange={(e, Period) => setTimespan(Period)}
-                color="primary"
-              >
-                <ToggleButton value={"hour"}>LAST HOUR</ToggleButton>
-                <ToggleButton value={"day"}>LAST DAY</ToggleButton>
-                <ToggleButton value={"week"}>LAST 7 DAYS</ToggleButton>
-                <ToggleButton value={"month"}>LAST 30 DAYS</ToggleButton>
-              </ToggleButtonGroup>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Datum auswählen"
+                  value={selectedDate}
+                  onChange={(newValue) => setSelectedDate(newValue)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Box>
           </Box>
         )}
