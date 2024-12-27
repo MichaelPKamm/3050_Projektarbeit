@@ -1,5 +1,11 @@
 import { renderToString } from "react-dom/server";
-import { CssBaseline, Link, Typography } from "@mui/material";
+import {
+  CssBaseline,
+  Link,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import L from "leaflet";
 import { MapContainer, TileLayer, GeoJSON, LayersControl } from "react-leaflet";
@@ -7,6 +13,8 @@ import Header from "./Header";
 import { BASE_LAYERS } from "./baseLayers";
 import meteodata from "./data/meteodaten_2023_daily.json";
 import dayjs from "dayjs";
+import { Vega } from "react-vega";
+import { createRoot } from "react-dom/client";
 
 //Maximalansicht definiert durch Schweizer Landesgrenzen
 const OUTER_BOUNDS = [
@@ -14,22 +22,48 @@ const OUTER_BOUNDS = [
   [48.230651, 11.47757],
 ];
 
-//Helper Funktion für Popups auf der Karte
+//Helper Funktion für Popups auf der Karte mit rendering der Grafik
+const fetchChartSpec = async (location) => {
+  const response = await fetch(`/api/py/${location}`);
+  return response.json();
+};
+
 const onEachFeature = (feature, layer) => {
   const { Standort, Datum, T_max_h1, WGS84_lat, WGS84_lng } =
     feature.properties;
-  layer.bindPopup(
-    `<div>
-      <h3>${Standort}</h3>
-      <p>
-        <strong>Datum:</strong> ${new Date(Datum).toLocaleDateString(
-          "de-DE"
-        )}<br/>
-        <strong>Max. Temperatur:</strong> ${T_max_h1}°C<br/>
-        <strong>Koordinaten:</strong> Lat: ${WGS84_lat}, Lng: ${WGS84_lng}
-      </p>
-    </div>`
-  );
+
+  const PopupContent = () => {
+    const [chartSpec, setChartSpec] = useState(null);
+
+    useEffect(() => {
+      fetchChartSpec(Standort).then((spec) => setChartSpec(spec));
+    }, [Standort]);
+
+    return (
+      <Box sx={{ width: "100%", height: "auto" }}>
+        <Typography variant="h6">{Standort}</Typography>
+        <Typography variant="body2">
+          <strong>Datum:</strong> {new Date(Datum).toLocaleDateString("de-DE")}
+          <br />
+          <strong>Max. Temperatur:</strong> {T_max_h1}°C
+          <br />
+          <strong>Koordinaten:</strong> Lat: {WGS84_lat}, Lng: {WGS84_lng}
+        </Typography>
+        <Box sx={{ mt: 2 }}>
+          {chartSpec ? (
+            <Vega spec={chartSpec} />
+          ) : (
+            <CircularProgress size={24} />
+          )}
+        </Box>
+      </Box>
+    );
+  };
+
+  const container = document.createElement("div");
+  const root = createRoot(container);
+  root.render(<PopupContent />);
+  layer.bindPopup(container);
 };
 
 //Darstellung der Punkte
