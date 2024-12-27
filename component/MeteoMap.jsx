@@ -40,14 +40,15 @@ const onEachFeature = (feature, layer) => {
     }, [Standort]);
 
     return (
-      <Box sx={{ width: "100%", height: "auto" }}>
+      <Box sx={{ width: "400", height: "500" }}>
         <Typography variant="h6">{Standort}</Typography>
         <Typography variant="body2">
           <strong>Datum:</strong> {new Date(Datum).toLocaleDateString("de-DE")}
           <br />
           <strong>Max. Temperatur:</strong> {T_max_h1}°C
           <br />
-          <strong>Koordinaten:</strong> Lat: {WGS84_lat}, Lng: {WGS84_lng}
+          <strong>Koordinaten:</strong> Latitude: {WGS84_lat}, Longitude:{" "}
+          {WGS84_lng}
         </Typography>
         <Box sx={{ mt: 2 }}>
           {chartSpec ? (
@@ -63,7 +64,11 @@ const onEachFeature = (feature, layer) => {
   const container = document.createElement("div");
   const root = createRoot(container);
   root.render(<PopupContent />);
-  layer.bindPopup(container);
+  layer.bindPopup(container, {
+    maxWidth: 700,
+    minWidth: 400,
+    maxHeight: 500,
+  });
 };
 
 //Darstellung der Punkte
