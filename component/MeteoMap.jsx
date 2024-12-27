@@ -73,8 +73,6 @@ const onEachFeature = (feature, layer) => {
 
 //Darstellung der Punkte
 const pointToLayer = (feature, latlng) => {
-  console.log("Feature:", feature);
-  console.log("LatLng:", latlng);
   return L.circleMarker(latlng, {
     radius: 10,
     color: "#eb3492",
@@ -150,7 +148,6 @@ function Map() {
           ))}
 
           <LayersControl.Overlay checked name="Meteodaten Zuerich">
-            {console.log("GeoJSON Data being passed:", geoJsonData)}
             <GeoJSON
               key={JSON.stringify(geoJsonData)}
               data={geoJsonData}
