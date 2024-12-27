@@ -7,7 +7,8 @@ app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 
 
 
-data_file_path = os.path.join(os.path.dirname(__file__), "meteodaten_2023_daily.json")
+# data_file_path = os.path.join(os.path.dirname(__file__), "meteodaten_2023_daily.json")
+data_file_path = "https://3050fastapivercel.vercel.app/meteodaten_2023_daily.json"
 with open(data_file_path, "r", encoding="utf-8") as f:
     data = json.load(f)
 
